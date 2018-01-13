@@ -1,7 +1,7 @@
 import wpilib
-# hi
 
-class MyRobot(wpilib.SampleRobot):
+from wpilib.drive import DifferentialDrive
+class MyRobot(wpilib.TimedRobot):
     '''Main robot class'''
 
     def robotInit(self):
@@ -13,7 +13,7 @@ class MyRobot(wpilib.SampleRobot):
         self.right_motor = wpilib.Jaguar(1)
         self.left_motor = wpilib.Jaguar(2)
 
-        self.robot_drive = wpilib.RobotDrive(self.left_motor, self.right_motor)
+        self.robot_drive = DifferentialDrive(self.left_motor, self.right_motor)
 
         #position gets automatically updated as robot moves
         self.gyro = wpilib.AnalogGyro(1)
