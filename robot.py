@@ -1,61 +1,43 @@
-import wpilib
+#!/usr/bin/env python3
+'''
+    This is a demo program showing the use of the RobotDrive class,
+    specifically it contains the code necessary to operate a robot with
+    tank drive.
+'''
 
+import wpilib
 from wpilib.drive import DifferentialDrive
-class MyRobot(wpilib.TimedRobot):
-    '''Main robot class'''
+
+
+class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
-        '''Robot-wide initialization code should go here'''
+        '''Robot initialization function'''
 
-        self.lstick = wpilib.Joystick(1)
-        self.rstick = wpilib.Joystick(2)
+        # object that handles basic drive operations
+        self.frontLeftMotor = wpilib.Spark(0)
+        self.rearLeftMotor = wpilib.Spark(1)
+        self.frontRightMotor = wpilib.Spark(2)
+        self.rearRightMotor = wpilib.Spark(3)
 
-        self.right_motor = wpilib.Jaguar(1)
-        self.left_motor = wpilib.Jaguar(2)
+        self.left = wpilib.SpeedControllerGroup(self.frontLeftMotor, self.rearLeftMotor)
+        self.right = wpilib.SpeedControllerGroup(self.frontRightMotor, self.rearRightMotor)
 
-        self.robot_drive = DifferentialDrive(self.left_motor, self.right_motor)
+        self.myRobot = DifferentialDrive(self.left, self.right)
+        self.myRobot.setExpiration(0.1)
 
-        #position gets automatically updated as robot moves
-        self.gyro = wpilib.AnalogGyro(1)
+        # joysticks 1 & 2 on the driver station
+        self.leftStick = wpilib.Joystick(0)
+        self.rightStick = wpilib.Joystick(1)
 
-    def disabled(self):
-        '''called when robot is disabled'''
-        while self.isDisabled():
-            wpilib.Timer.delay(0.01)
+    def teleopInit(self):
+        '''Executed at the start of teleop mode'''
+        self.myRobot.setSafetyEnabled(True)
 
-    def autonomous(self):
-        '''Called when autonomous mode is enabled'''
+    def teleopPeriodic(self):
+        '''Runs the motors with tank steering'''
+        self.myRobot.tankDrive(self.leftStick.getY() * -1, self.rightStick.getY() * -1)
 
-        timer = wpilib.Timer()
-        timer.start()
-
-        while self.isAutonomous() and self.isEnabled():
-
-            if timer.get() <.99:
-                self.robot_drive.arcadeDrive(1, -.8)
-
-            elif timer.get() <2.3:
-                self.robot_drive.arcadeDrive(1, 0)
-
-            elif timer.get() <5.8:
-                self.robot_drive.arcadeDrive(1, .6)
-
-            elif timer.get() <6.9:
-                self.robot_drive.arcadeDrive(1, 0)
-            else:
-                self.robot_drive.arcadeDrive(0, 0)
-
-            wpilib.Timer.delay(0.01)
-
-    def operatorControl(self):
-        '''Called when operator control mode is enabled'''
-
-        while self.isOperatorControl() and self.isEnabled():
-
-            self.robot_drive.tankDrive(self.left_motor, self.right_motor)
-
-            wpilib.Timer.delay(0.04)
 
 if __name__ == '__main__':
-    wpilib.run(MyRobot,
-               physics_enabled=True)
+    wpilib.run(MyRobot)
