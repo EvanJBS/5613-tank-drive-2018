@@ -1,6 +1,8 @@
 import wpilib
 
 from wpilib.drive import DifferentialDrive
+
+
 class MyRobot(wpilib.TimedRobot):
     '''Main robot class'''
 
@@ -15,7 +17,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.robot_drive = DifferentialDrive(self.left_motor, self.right_motor)
 
-        #position gets automatically updated as robot moves
+        # position gets automatically updated as robot moves
         self.gyro = wpilib.AnalogGyro(1)
 
     def disabled(self):
@@ -31,16 +33,16 @@ class MyRobot(wpilib.TimedRobot):
 
         while self.isAutonomous() and self.isEnabled():
 
-            if timer.get() <.99:
+            if timer.get() < .99:
                 self.robot_drive.arcadeDrive(1, -.8)
 
-            elif timer.get() <2.3:
+            elif timer.get() < 2.3:
                 self.robot_drive.arcadeDrive(1, 0)
 
-            elif timer.get() <5.8:
+            elif timer.get() < 5.8:
                 self.robot_drive.arcadeDrive(1, .6)
 
-            elif timer.get() <6.9:
+            elif timer.get() < 6.9:
                 self.robot_drive.arcadeDrive(1, 0)
             else:
                 self.robot_drive.arcadeDrive(0, 0)
@@ -51,10 +53,10 @@ class MyRobot(wpilib.TimedRobot):
         '''Called when operator control mode is enabled'''
 
         while self.isOperatorControl() and self.isEnabled():
-
             self.robot_drive.tankDrive(self.left_motor, self.right_motor)
 
             wpilib.Timer.delay(0.04)
+
 
 if __name__ == '__main__':
     wpilib.run(MyRobot,
