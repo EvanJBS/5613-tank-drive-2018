@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-'''
-    This is a demo program showing the use of the RobotDrive class,
-    specifically it contains the code necessary to operate a robot with
-    tank drive.
-'''
 
 import wpilib
 from wpilib.drive import DifferentialDrive
@@ -12,7 +7,6 @@ from wpilib.drive import DifferentialDrive
 class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
-        '''Robot initialization function'''
 
         # object that handles basic drive operations
         self.frontLeftMotor = wpilib.Spark(0)
@@ -37,6 +31,18 @@ class MyRobot(wpilib.IterativeRobot):
     def teleopPeriodic(self):
         '''Runs the motors with tank steering'''
         self.myRobot.tankDrive(self.leftStick.getY() * -1, self.rightStick.getY() * -1)
+
+    def autonomousInit(self):
+        self.auto_loop_counter = 0
+
+    def autonomousPeriodic(self):
+
+        if self.auto_loop_counter < 100:
+            self.myRobot.tankDrive(-0.5, 0)
+            self.auto_loop_counter += 1
+
+        else:
+            DifferentialDrive(0, 0)
 
 
 if __name__ == '__main__':
