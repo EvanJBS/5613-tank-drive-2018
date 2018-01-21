@@ -16,6 +16,24 @@ class MyRobot(wpilib.SampleRobot):
         self.right = wpilib.SpeedControllerGroup(self.frontRight, self.rearRight)
 
         self.drive = DifferentialDrive(self.left, self.right)
+        self.stick = wpilib.Joystick(1)
+
+    def disabled(self):
+        while self.isDisabled():
+            wpilib.Timer.delay(0.01)
+
+    def operatorControl(self):
+        timer = wpilib.Timer()
+        timer.start()
+        while self.isOperatorControl() and self.isEnabled():
+
+            # Move a motor with a Joystick
+            self.drive.tankDrive(self.stick.getY(), self.stick.getY())
+
+            if timer.hasPeriodPassed(1.0):
+                print("Analog 8: %s" % self.ds.getBatteryVoltage())
+
+            wpilib.Timer.delay(0.02)
 
     def autonomous(self):
         timer = wpilib.Timer()
@@ -26,7 +44,7 @@ class MyRobot(wpilib.SampleRobot):
             else:
                 self.drive.tankDrive(0, 0)
 
-
+            wpilib.Timer.delay(0.01)
 
 
 if __name__ == '__main__':
