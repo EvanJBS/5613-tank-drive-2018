@@ -1,9 +1,14 @@
+#
+# See the notes for the other physics sample
+#
+
+
 from pyfrc.physics import drivetrains
 
 
 class PhysicsEngine(object):
     '''
-        Simulates a 4-wheel robot using Tank Drive joystick control
+       Simulates a 4-wheel robot using Tank Drive joystick control 
     '''
 
     def __init__(self, physics_controller):
@@ -17,15 +22,19 @@ class PhysicsEngine(object):
 
     def update_sim(self, hal_data, now, tm_diff):
         '''
-         Called when the simulation parameters for the program need to be updated.
+            Called when the simulation parameters for the program need to be
+            updated.
 
-         :param now: The current time as a float.
-         :param tm_diff: The amount of time that has passed since the last tie this function was called.
+            :param now: The current time as a float
+            :param tm_diff: The amount of time that has passed since the last
+                            time that this function was called
         '''
 
-        # simulate the drive train
-        right_motor = hal_data['pwm'][1]['value']
-        left_motor = hal_data['pwm'][2]['value']
+        # Simulate the drivetrain
+        lf_motor = hal_data['pwm'][1]['value']
+        lr_motor = hal_data['pwm'][2]['value']
+        rf_motor = hal_data['pwm'][3]['value']
+        rr_motor = hal_data['pwm'][4]['value']
 
-        speed, rotation = drivetrains.two_motor_drivetrain(right_motor, left_motor)
+        speed, rotation = drivetrains.four_motor_drivetrain(lr_motor, rr_motor, lf_motor, rf_motor)
         self.physics_controller.drive(speed, rotation, tm_diff)
