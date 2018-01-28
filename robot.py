@@ -16,7 +16,7 @@ class MyRobot(wpilib.SampleRobot):
         self.right = wpilib.SpeedControllerGroup(self.frontRight, self.rearRight)
 
         self.drive = DifferentialDrive(self.left, self.right)
-        self.stick = wpilib.Joystick(1)
+        self.stick = wpilib.Joystick(0)
 
     def disabled(self):
         while self.isDisabled():
