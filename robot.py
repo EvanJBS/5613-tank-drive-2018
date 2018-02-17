@@ -38,15 +38,23 @@ class MyRobot(wpilib.SampleRobot):
             wpilib.Timer.delay(0.02)
 
     def autonomous(self):
-        timer = wpilib.Timer()
-        timer.start()
-        while self.isAutonomous() and self.isEnabled():
-            if timer.get() < 1.0:
-                self.drive.tankDrive(0, 0)
-            else:
-                self.drive.tankDrive(0, 0)
-
-            wpilib.Timer.delay(0.01)
+        # timer = wpilib.Timer()
+        # timer.start()
+        # while self.isAutonomous() and self.isEnabled():
+        #     if timer.get() < 1.0:
+        #         self.drive.tankDrive(0, 0)
+        #     else:
+        #         self.drive.tankDrive(0, 0)
+        #
+        #     wpilib.Timer.delay(0.01)
+        if wpilib.DriverStation.getInstance().getGameSpecificMessage() == "RRR" or "RLR":
+            while self.isAutonomous() and self.isEnabled():
+                self.drive.arcadeDrive(1, 0)
+        elif wpilib.DriverStation.getInstance().getGameSpecificMessage() == "LLL" or "LRL":
+            while self.isAutonomous() and self.isEnabled():
+                self.drive.arcadeDrive(-1, 0)
+        else:
+            self.drive.arcadeDrive(0, 0)
 
 
 if __name__ == '__main__':
