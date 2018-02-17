@@ -10,19 +10,15 @@
 
   	},
   	"field": {
-      "w": 50,
-      "h": 50,
-      "px_per_ft": 10,
-
+      "w": 67,
+      "h": 34,
+      "px_per_ft": 16,
+      "image": "/home/cat/PycharmProjects/5613-tank-drive-2018_2/sim/pic.png",
       "objects": [
-      	{ "color": "blue",
-      	  "points": [ [7.25,11.21], [10.333,11.21], [10.333,27], [7.25,27] ] },
-
-      	{ "color": "grey",
-      	  "points": [ [16.83, 0], [19.90, 0], [19.90, 15.75], [16.83, 15.75] ] },
-
-        { "color": "purple",
-          "points": [ [10, 0], [20, 0], [20, 17], [10, 17] ] }
+        {
+          "color": "white",
+          "points": [[2,2], [3,3], [2,4]]
+        }
       ]
     }
   }
