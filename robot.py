@@ -15,6 +15,9 @@ class MyRobot(wpilib.SampleRobot):
         self.rearRight = wpilib.Spark(3)
         self.right = wpilib.SpeedControllerGroup(self.frontRight, self.rearRight)
 
+        self.intake = wpilib.Spark(4)
+
+
         self.drive = DifferentialDrive(self.left, self.right)
         self.stick2 = wpilib.Joystick(0)
         self.stick = wpilib.Joystick(1)
@@ -27,26 +30,44 @@ class MyRobot(wpilib.SampleRobot):
         timer = wpilib.Timer()
         timer.start()
         while self.isOperatorControl() and self.isEnabled():
-            if self.stick2.getRawButton(1) and self.stick2.getRawButton(7):
-                self.drive.arcadeDrive(self.stick2.getY() * 0.6, self.stick2.getX() * 0.7, True)
-            elif self.stick2.getRawButton(7) and not self.stick2.getRawButton(1):
-                self.drive.arcadeDrive(self.stick2.getY() * -0.6, self.stick2.getX() * 0.7, True)
-            elif self.stick2.getRawButton(1) and not self.stick2.getRawButton(7):
-                self.drive.arcadeDrive(self.stick2.getY() * 1, self.stick2.getX() * 1, True)
-            else:
-                self.drive.arcadeDrive(self.stick2.getY() * -1, self.stick2.getX() * 1, True)
+            # if self.stick2.getRawButton(1) and self.stick2.getRawButton(7):
+            #     self.drive.arcadeDrive(self.stick2.getY() * 0.6, self.stick2.getX() * 0.7, True)
+            # elif self.stick2.getRawButton(7) and not self.stick2.getRawButton(1):
+            #     self.drive.arcadeDrive(self.stick2.getY() * -0.6, self.stick2.getX() * 0.7, True)
+            # elif self.stick2.getRawButton(1) and not self.stick2.getRawButton(7):
+            #     self.drive.arcadeDrive(self.stick2.getY() * 1, self.stick2.getX() * 1, True)
+            # else:
+            #     self.drive.arcadeDrive(self.stick2.getY() * -1, self.stick2.getX() * 1, True)
+            if self.stick2.getRawButton(6):
+                self.intake.set(1)
             wpilib.Timer.delay(0.02)
 
     def autonomous(self):
+        # timer = wpilib.Timer()
+        # timer.start()
+        # while self.isAutonomous() and self.isEnabled():
+        #     if timer.get() < 1.0:
+        #         self.drive.tankDrive(0, 0)
+        #     else:
+        #         self.drive.tankDrive(0, 0)
+        #
+        #     wpilib.Timer.delay(0.01)
         timer = wpilib.Timer()
         timer.start()
-        while self.isAutonomous() and self.isEnabled():
-            if timer.get() < 1.0:
-                self.drive.tankDrive(0, 0)
-            else:
-                self.drive.tankDrive(0, 0)
-
-            wpilib.Timer.delay(0.01)
+        if wpilib.DriverStation.getInstance().getGameSpecificMessage() == "RRR" or "RLR":
+            while self.isAutonomous() and self.isEnabled():
+                if timer.get() < 2.0:
+                    self.drive.arcadeDrive(1, 0)
+                else:
+                    self.drive.arcadeDrive(0, 0)
+        elif wpilib.DriverStation.getInstance().getGameSpecificMessage() == "LLL" or "LRL":
+            while self.isAutonomous() and self.isEnabled():
+                if timer.get() < 2.0:
+                    self.drive.arcadeDrive(-1, 0)
+                else:
+                    self.drive.arcadeDrive(0, 0)
+        else:
+            self.drive.arcadeDrive(0, 0)
 
 
 if __name__ == '__main__':
