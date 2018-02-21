@@ -16,6 +16,9 @@ class MyRobot(wpilib.IterativeRobot):
         self.right = wpilib.SpeedControllerGroup(self.frontRight, self.rearRight)
 
         self.intake = wpilib.Spark(4)
+        self.Lshoot = wpilib.Spark(5)
+        self.Rshoot = wpilib.Spark(6)
+        self.shoot = wpilib.SpeedControllerGroup(self.Lshoot, self.Rshoot)
 
 
         self.drive = DifferentialDrive(self.left, self.right)
@@ -30,9 +33,11 @@ class MyRobot(wpilib.IterativeRobot):
         timer.start()
         self.a = -1
         self.b = 0
+        self.c = 0
     def teleopPeriodic(self):
         self.drive.arcadeDrive(self.stick1.getY() * self.a, self.stick1.getX() * 0.8)
         self.intake.set(self.b)
+        self.shoot.set(self.c)
         if self.stick1.getRawButton(7) and self.stick1.getRawButton(1):
             self.a = 0.6
         elif self.stick1.getRawButton(7):
@@ -43,9 +48,17 @@ class MyRobot(wpilib.IterativeRobot):
             self.b = 1
         elif self.stick1.getRawButton(4):
             self.b = -1
+        elif self.stick1.getRawButton(5):
+            self.c = 1
+        elif self.stick1.getRawButton(3):
+            self.c = -1
+        elif self.stick1.getRawButton(2):
+            self.b = 1
+            self.c = 1
         else:
             self.a = -1
             self.b = 0
+            self.c = 0
     def autonomousInit(self):
         timer = wpilib.Timer()
         timer.start()
