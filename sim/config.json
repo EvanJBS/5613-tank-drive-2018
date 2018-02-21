@@ -2,8 +2,8 @@
   "pyfrc": {
 
   	"robot": {
-  	  "w": 2,
-  	  "h": 3,
+  	  "w": 3.4,
+  	  "h": 3.9,
       "starting_x": 2,
       "starting_y": 20,
       "starting_angle": 0
@@ -13,7 +13,7 @@
       "w": 67,
       "h": 34,
       "px_per_ft": 16,
-      "image": "/home/cat/PycharmProjects/5613-tank-drive-2018/sim/pic.png",
+      "image": "/home/thunderdog/PycharmProjects/5613-tank-drive-2018_2/sim/pic.png",
       "objects": [
         {
           "color": "white",
