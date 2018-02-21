@@ -4,7 +4,7 @@ import wpilib
 from wpilib.drive import DifferentialDrive
 
 
-class MyRobot(wpilib.SampleRobot):
+class MyRobot(wpilib.IterativeRobot):
 
     def robotInit(self):
         self.frontLeft = wpilib.Spark(0)
@@ -19,8 +19,10 @@ class MyRobot(wpilib.SampleRobot):
 
 
         self.drive = DifferentialDrive(self.left, self.right)
-        self.stick2 = wpilib.Joystick(0)
-        self.stick = wpilib.Joystick(1)
+        self.stick1 = wpilib.Joystick(0)
+        self.stick2 = wpilib.Joystick(1)
+        self.a = -1
+        self.b = 0
 
     def disabled(self):
         while self.isDisabled():
@@ -30,18 +32,21 @@ class MyRobot(wpilib.SampleRobot):
         timer = wpilib.Timer()
         timer.start()
         while self.isOperatorControl() and self.isEnabled():
-            # if self.stick2.getRawButton(1) and self.stick2.getRawButton(7):
-            #     self.drive.arcadeDrive(self.stick2.getY() * 0.6, self.stick2.getX() * 0.7, True)
-            # elif self.stick2.getRawButton(7) and not self.stick2.getRawButton(1):
-            #     self.drive.arcadeDrive(self.stick2.getY() * -0.6, self.stick2.getX() * 0.7, True)
-            # elif self.stick2.getRawButton(1) and not self.stick2.getRawButton(7):
-            #     self.drive.arcadeDrive(self.stick2.getY() * 1, self.stick2.getX() * 1, True)
-            # else:
-            #     self.drive.arcadeDrive(self.stick2.getY() * -1, self.stick2.getX() * 1, True)
-            if self.stick2.getRawButton(6):
-                self.intake.set(1)
-            wpilib.Timer.delay(0.02)
-
+            self.drive.arcadeDrive(self.stick1.getY() * self.a, self.stick1.getX() * 0.8)
+            self.intake.set(self.b)
+            if self.stick1.getRawButton(7) and self.stick1.getRawButton(1):
+                self.a = 0.6
+            elif self.stick1.getRawButton(7):
+                self.a = -0.6
+            elif self.stick1.getRawButton(1):
+                self.a = 1
+            elif self.stick1.getRawButton(6):
+                self.b = 1
+            elif self.stick1.getRawButton(4):
+                self.b = -1
+            else:
+                self.a = -1
+                self.b = 0
     def autonomous(self):
         # timer = wpilib.Timer()
         # timer.start()
