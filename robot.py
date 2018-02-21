@@ -21,58 +21,42 @@ class MyRobot(wpilib.IterativeRobot):
         self.drive = DifferentialDrive(self.left, self.right)
         self.stick1 = wpilib.Joystick(0)
         self.stick2 = wpilib.Joystick(1)
-        self.a = -1
-        self.b = 0
 
     def disabled(self):
         while self.isDisabled():
             wpilib.Timer.delay(0.01)
-
-    def operatorControl(self):
+    def teleopInit(self):
         timer = wpilib.Timer()
         timer.start()
-        while self.isOperatorControl() and self.isEnabled():
-            self.drive.arcadeDrive(self.stick1.getY() * self.a, self.stick1.getX() * 0.8)
-            self.intake.set(self.b)
-            if self.stick1.getRawButton(7) and self.stick1.getRawButton(1):
-                self.a = 0.6
-            elif self.stick1.getRawButton(7):
-                self.a = -0.6
-            elif self.stick1.getRawButton(1):
-                self.a = 1
-            elif self.stick1.getRawButton(6):
-                self.b = 1
-            elif self.stick1.getRawButton(4):
-                self.b = -1
-            else:
-                self.a = -1
-                self.b = 0
-    def autonomous(self):
-        # timer = wpilib.Timer()
-        # timer.start()
-        # while self.isAutonomous() and self.isEnabled():
-        #     if timer.get() < 1.0:
-        #         self.drive.tankDrive(0, 0)
-        #     else:
-        #         self.drive.tankDrive(0, 0)
-        #
-        #     wpilib.Timer.delay(0.01)
+        self.a = -1
+        self.b = 0
+    def teleopPeriodic(self):
+        self.drive.arcadeDrive(self.stick1.getY() * self.a, self.stick1.getX() * 0.8)
+        self.intake.set(self.b)
+        if self.stick1.getRawButton(7) and self.stick1.getRawButton(1):
+            self.a = 0.6
+        elif self.stick1.getRawButton(7):
+            self.a = -0.6
+        elif self.stick1.getRawButton(1):
+            self.a = 1
+        elif self.stick1.getRawButton(6):
+            self.b = 1
+        elif self.stick1.getRawButton(4):
+            self.b = -1
+        else:
+            self.a = -1
+            self.b = 0
+    def autonomousInit(self):
         timer = wpilib.Timer()
         timer.start()
         if wpilib.DriverStation.getInstance().getGameSpecificMessage() == "RRR" or "RLR":
-            while self.isAutonomous() and self.isEnabled():
-                if timer.get() < 2.0:
-                    self.drive.arcadeDrive(1, 0)
-                else:
-                    self.drive.arcadeDrive(0, 0)
+            self.speed = 1
         elif wpilib.DriverStation.getInstance().getGameSpecificMessage() == "LLL" or "LRL":
-            while self.isAutonomous() and self.isEnabled():
-                if timer.get() < 2.0:
-                    self.drive.arcadeDrive(-1, 0)
-                else:
-                    self.drive.arcadeDrive(0, 0)
+            self.speed = -1
         else:
-            self.drive.arcadeDrive(0, 0)
+            self.speed = 0
+    def autonomousPeriodic(self):
+        self.drive.arcadeDrive(self.speed, 0)
 
 
 if __name__ == '__main__':
