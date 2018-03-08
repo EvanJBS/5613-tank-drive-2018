@@ -34,10 +34,13 @@ class MyRobot(wpilib.IterativeRobot):
         # self.toggle3 = Toggle(self.stick1, 3)
         # self.toggle2 = Toggle(self.stick1, 2)
 
-        self.IntakeSpd = wpilib.Spark(4)
         self.Lshoot = wpilib.Spark(5)
         self.Rshoot = wpilib.Spark(6)
         self.shoot = wpilib.SpeedControllerGroup(self.Lshoot, self.Rshoot)
+
+        self.Lintake = wpilib.Spark(4)
+        self.Rintake = wpilib.Spark(8)
+        self.intake = wpilib.SpeedControllerGroup(self.Lintake, self.Rintake)
 
     def disabled(self):
         wpilib.Timer.delay(0.01)
@@ -48,8 +51,8 @@ class MyRobot(wpilib.IterativeRobot):
 
     def teleopPeriodic(self):
         self.drive.arcadeDrive((self.stick1.getY() * self.DriveSpd) * self.Direction, self.stick1.getX() * self.RotationSpd)
-        self.IntakeSpd.set(self.IntakeSpd)
-        self.shoot.set(self.ShooterSpd * self.ShooterSpd)
+        self.intake.set(self.IntakeSpd)
+        self.shoot.set(self.ShooterSpd)
 
         if self.stick1.getRawButton(1):
             self.Direction = -1
@@ -60,15 +63,15 @@ class MyRobot(wpilib.IterativeRobot):
         else:
             self.DriveSpd = 1
         if self.stick1.getRawButton(6):
-            self.IntakeSpd = 1
+            self.IntakeSpd = 0.5
         elif self.stick1.getRawButton(4):
-            self.IntakeSpd = -1
+            self.IntakeSpd = -0.5
         else:
             self.IntakeSpd = 0
         if self.stick1.getRawButton(5):
-            self.ShooterSpd = 1
+            self.ShooterSpd = 0.5
         elif self.stick1.getRawButton(3):
-            self.ShooterSpd = -1
+            self.ShooterSpd = -0.5
         else:
             self.ShooterSpd = 0
 
