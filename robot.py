@@ -83,22 +83,22 @@ class MyRobot(wpilib.IterativeRobot):
         print(self.gamedata)
 
     def autonomousPeriodic(self):
-        self.drive.arcadeDrive(self.Speed * self.Direction, self.Rotation)
-        self.IntakeSpd.set(self.IntakeSpd)
+        self.drive.arcadeDrive(self.DriveSpd * self.Direction, self.RotationSpd)
+        self.intake.set(self.IntakeSpd)
         self.shoot.set(self.ShooterSpd)
         if self.gamedata is "LLL" or "LRL" and not "RRR" or "RLR":
             if self.timer.get() < 1.0:
-                self.Speed = 0.5
+                self.DriveSpd = 0.5
             else:
-                self.Speed = 0
+                self.DriveSpd = 0
         if self.gamedata is "RRR" or "RLR" and not "LLL" or "LRL":
             if self.timer.get() < 1.0:
-                self.Speed = -0.5
+                self.DriveSpd = -0.5
             else:
-                self.Speed = 0
+                self.DriveSpd = 0
 
         else:
-            self.Speed = -1
+            self.DriveSpd = -1
 
 
 if __name__ == '__main__':
